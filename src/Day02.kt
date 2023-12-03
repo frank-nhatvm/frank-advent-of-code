@@ -8,7 +8,7 @@ enum class CubeType(val color: String) {
     ;
 
     companion object {
-        fun from(value: String) = values().associateBy { it.color }[value] ?: throw Exception("Unknown  cube type")
+        fun from(value: String) = entries.associateBy { it.color }[value] ?: throw Exception("Unknown  cube type")
     }
 }
 
