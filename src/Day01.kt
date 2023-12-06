@@ -182,19 +182,24 @@ val result = list1 union list3
         val (listSeedId, listDataBlock) = input.parse()
 //        val hm = mutableMapOf<Long, Long>()
 
-        val startListSeedId = listSeedId.chunked(2).map { it.first() to it[1] }.map { it.first }
-        val hm = findLocationForSeed(startListSeedId, listDataBlock)
-//        listSeedId.chunked(2).map { it.first() to it[1] }.forEach { p ->
-//            val start = p.first
-//            val length = p.second
-//            val last = start + length - 1L
-//            val list = (start..last).toList()
-//            val result = findLocationForSeed(list, listDataBlock)
-//            hm.putAll(result)
-//        }
+//        val startListSeedId = listSeedId.chunked(2).map { it.first() to it[1] }.map { it.first }
+//        val hm = findLocationForSeed(startListSeedId, listDataBlock)
+        var minValue = -1L
+        listSeedId.chunked(2).map { it.first() to it[1] }.forEach { p ->
+            val start = p.first
+            val length = p.second
+            val last = start + length - 1L
+            val list = (start..last).toList()
+            val result = findLocationForSeed(list, listDataBlock)
+            val tmpMin =  result.values.min()
+            if(minValue == -1L || tmpMin < minValue){
+                minValue = tmpMin
+            }
+          //  hm.putAll(result)
+        }
 
 
-        return hm.values.min()
+        return minValue
     }
 
     // test if implementation meets criteria from the description, like:
@@ -203,7 +208,7 @@ val result = list1 union list3
 
   //  part2(testInput).println()
 
-   // val input = readInput("data")
+    val input = readInput("data")
 //    part1(input).println()
-   // part2(input).println()
+    part2(input).println()
 }

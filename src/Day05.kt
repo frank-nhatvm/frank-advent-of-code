@@ -1,4 +1,5 @@
 import java.lang.Exception
+import kotlin.math.min
 
 data class RowData(val source: Long, val destination: Long, val length: Long) {
     fun indexInRange(num: Long): Long {
@@ -19,7 +20,7 @@ data class AlmanacData(
     val destination: TypeInput,
     val rows: List<RowData>
 ) {
-    private val hm = mutableMapOf<Long,Long>()
+    private val hm = mutableMapOf<Long, Long>()
     fun findDestinationFor(source: Long): Long {
 
         rows.forEach { rowData ->
@@ -231,12 +232,30 @@ fun main() {
         val temperatureHumidity = listAlmanacData.first { it.source == TypeInput.TEMPERATURE }
         val humidityLocation = listAlmanacData.first { it.source == TypeInput.HUMIDITY }
 
+//        var tmpSeedIds = mutableListOf<Long>()
+//        listSeedId.chunked(2).forEach {
+//            val start = it.first()
+//            val length = it[1]
+//            val end = start + length - 1L
+//            val tmpListSeedId = (start..end)
+//           tmpSeedIds =  (tmpSeedIds union tmpListSeedId).toMutableList()
+//        }
+
+
+        var minValue = -1L
+
+        val estimatedMin = humidityLocation.rows.map { it.destination }.min()
+
         listSeedId.chunked(2).forEach {
             val start = it.first()
             val length = it[1]
-            val end = start + length -1L
+            val end = start + length - 1L
             val tmpListSeedId = (start..end)
             tmpListSeedId.forEach { seedId ->
+
+                if(minValue == estimatedMin){
+                    return@forEach
+                }
 
                 if (!hmSeedLocation.contains(seedId)) {
                     var fertilizer = -1L
@@ -255,7 +274,6 @@ fun main() {
                         val savedFertilizerLocation = hmFertilizerLocation[fertilizer]
                         if (savedFertilizerLocation != null) {
                             location = savedFertilizerLocation
-
                         } else {
                             water = fertilizerWater.findDestinationFor(fertilizer)
                             val savedWaterLocation = hmWaterLocation[water]
@@ -285,30 +303,11 @@ fun main() {
                         }
                     }
 
-                    hmSeedLocation[seedId] = location
-
-                    if(location != -1L){
-                        if(soil != -1L){
-                            hmSoilLocation[soil] = location
-                        }
-                        if(fertilizer!= -1L){
-                            hmFertilizerLocation[fertilizer] = location
-                        }
-                        if(water!= -1L){
-                            hmWaterLocation[water] = location
-                        }
-                        if(light!= -1L){
-                            hmLightLocation[light] = location
-                        }
-                        if(temperature!= -1L){
-                            hmTemperatureLocation[temperature] = location
-                        }
-                        if(humidity!= -1L){
-                            hmHumidityLocation[humidity] = location
-                        }
+                    if (minValue == -1L || location < minValue) {
+                        minValue = location
                     }
-                }
 
+                }
 
 
             }
@@ -316,16 +315,17 @@ fun main() {
 
 
 
-        return hmSeedLocation.values.min()
+//        return hmSeedLocation.values.min()
+        return  minValue
     }
 
     // test if implementation meets criteria from the description, like:
-      val testInput = readInput("data_test")
-   // part1(testInput).println()
+     val testInput = readInput("data_test")
+    // part1(testInput).println()
 
-      part2(testInput).println()
+       part2(testInput).println()
 
-     val input = readInput("data")
+    val input = readInput("data")
     //part1(input).println()
-   //  part2(input).println()
+ //   part2(input).println()
 }
