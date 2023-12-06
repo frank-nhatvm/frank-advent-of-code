@@ -1,3 +1,11 @@
+| Day   | Branch |
+|-------|--------|
+ | Day01 | Day01  |
+| Day02 | Day02  |
+| Day03 | Day03  |
+| ...   | ...    |
+| Day25 | Day25  |
+
 # frank-advent-of-code-2023
 
 Welcome to the Advent of Code[^aoc] Kotlin project created by [frank-nhatvm][github] using the [Advent of Code Kotlin Template][template] delivered by JetBrains.
